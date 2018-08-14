@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using NOTEit.Models;
 
 namespace NOTEit.ViewModels.Semester
 {
@@ -14,6 +13,6 @@ namespace NOTEit.ViewModels.Semester
         [Display(Name = "Fächer")]
         public virtual ICollection<int> Subjects { get; set; } = new List<int>();
         
-        public virtual ICollection<Subject> AllSubjects { get; set; }
+        public virtual ICollection<Models.Subject> AllSubjects { get; set; }
     }
 }

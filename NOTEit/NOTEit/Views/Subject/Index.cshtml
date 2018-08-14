@@ -1,13 +1,13 @@
-﻿@model IEnumerable<NOTEit.Models.Semester>
+﻿@model IEnumerable<NOTEit.Models.Subject>
 
 @{
-    ViewBag.Title = "Semesterliste";
+    ViewBag.Title = "Fachliste";
 }
 
 <h2>@ViewBag.Title</h2>
 
 <p>
-    @Html.ActionLink("Neues Semester erstellen", "Create")
+    @Html.ActionLink("Neues Fach erstellen", "Create")
 </p>
 
 <table class="table">
@@ -16,7 +16,7 @@
             @Html.DisplayNameFor(model => model.Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Subjects)
+            @Html.DisplayNameFor(model => model.Semesters)
         </th>
         <th></th>
     </tr>
@@ -28,10 +28,10 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @foreach (var subject in item.Subjects)
+                @foreach (var semester in item.Semesters)
                 {
-                    @Html.ActionLink(subject.Name, "Edit", "Subject", new { id = subject.Id }, null)
-                    if (subject != item.Subjects.Last())
+                    @Html.ActionLink(semester.Name, "Edit", "Semester", new { id = semester.Id }, null)
+                    if (semester != item.Semesters.Last())
                     {
                         @Html.DisplayText(", ")
                     }
