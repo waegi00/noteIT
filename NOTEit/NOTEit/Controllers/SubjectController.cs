@@ -89,6 +89,7 @@ namespace NOTEit.Controllers
             var subject = _db.Subjects.FirstOrDefault(x => x.Id == viewModel.Id);
             if (subject == null) return View("Error");
             subject.Name = viewModel.Name;
+            subject.Semesters.Clear();
             subject.Semesters = _db.Semesters.Where(x => viewModel.Semesters.Contains(x.Id)).ToList();
 
             _db.Entry(subject).State = EntityState.Modified;

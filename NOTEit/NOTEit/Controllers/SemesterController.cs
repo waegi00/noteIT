@@ -92,6 +92,7 @@ namespace NOTEit.Controllers
             var semester = _db.Semesters.FirstOrDefault(x => x.Id == viewModel.Id);
             if (semester == null) return View("Error");
             semester.Name = viewModel.Name;
+            semester.Subjects.Clear();
             semester.Subjects = _db.Subjects.Where(x => viewModel.Subjects.Contains(x.Id)).ToList();
 
             _db.Entry(semester).State = EntityState.Modified;
