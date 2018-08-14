@@ -15,7 +15,7 @@ namespace NOTEit.Controllers
 
         public ActionResult Index()
         {
-            return View(_db.Semesters.Where(x => x.Owner.Id == User.Identity.GetUserId()).ToList());
+            return View(_db.Semesters.ToList());
         }
 
         public ActionResult Details(int? id)
@@ -25,7 +25,7 @@ namespace NOTEit.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var semester = _db.Semesters.Find(id);
-            if (semester == null || semester.Owner.Id != User.Identity.GetUserId())
+            if (semester == null)
             {
                 return HttpNotFound();
             }
@@ -37,7 +37,7 @@ namespace NOTEit.Controllers
             return View(
                 new SemesterFormViewModel
                 {
-                    AllSubjects = _db.Subjects.Where(x => x.Semesters.Any(y => y.Owner.Id == User.Identity.GetUserId())).ToList()
+                    AllSubjects = _db.Subjects.ToList()
                 }
             );
         }
@@ -78,7 +78,7 @@ namespace NOTEit.Controllers
                     Id = semester.Id,
                     Name = semester.Name,
                     Subjects = semester.Subjects.Select(x => x.Id).ToList(),
-                    AllSubjects = _db.Subjects.Where(x => x.Semesters.Any(y => y.Owner.Id == User.Identity.GetUserId())).ToList()
+                    AllSubjects = _db.Subjects.ToList()
                 }
             );
         }
@@ -106,7 +106,7 @@ namespace NOTEit.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var semester = _db.Semesters.Find(id);
-            if (semester == null || semester.Owner.Id != User.Identity.GetUserId())
+            if (semester == null)
             {
                 return HttpNotFound();
             }
@@ -118,7 +118,7 @@ namespace NOTEit.Controllers
         public ActionResult Delete(int id)
         {
             var semester = _db.Semesters.Find(id);
-            if (semester == null || semester.Owner.Id != User.Identity.GetUserId()) return View("Error");
+            if (semester == null) return View("Error");
             _db.Semesters.Remove(semester);
             _db.SaveChanges();
             return RedirectToAction("Index");
