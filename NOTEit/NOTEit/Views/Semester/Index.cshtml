@@ -1,0 +1,48 @@
+﻿@model IEnumerable<NOTEit.Models.Semester>
+
+@{
+    ViewBag.Title = "Semesterliste";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Neues Semester erstellen", "Create")
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Subjects)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @foreach (var subject in item.Subjects)
+                {
+                    @Html.ActionLink(subject.Name, "Edit", "Subject", null, new { id = subject.Id })
+                    if (subject != item.Subjects.Last())
+                    {
+                        @Html.DisplayText(", ")
+                    }
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Bearbeiten", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Löschen", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
