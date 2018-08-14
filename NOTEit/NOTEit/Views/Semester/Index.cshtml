@@ -33,7 +33,7 @@
                     @Html.ActionLink(subject.Name, "Edit", "Subject", new { id = subject.Id }, null)
                     if (subject != item.Subjects.Last())
                     {
-                        @Html.DisplayText(", ")
+                        @Html.DisplayName(", ")
                     }
                 }
             </td>

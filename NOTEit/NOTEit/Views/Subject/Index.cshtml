@@ -33,7 +33,7 @@
                     @Html.ActionLink(semester.Name, "Edit", "Semester", new { id = semester.Id }, null)
                     if (semester != item.Semesters.Last())
                     {
-                        @Html.DisplayText(", ")
+                        @Html.DisplayName(", ")
                     }
                 }
             </td>
