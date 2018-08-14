@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
@@ -14,6 +15,7 @@ namespace NOTEit.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private readonly ApplicationDbContext _db = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -51,7 +53,7 @@ namespace NOTEit.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(_db.Users.FirstOrDefault(x => x.Email == model.EmailUsername)?.UserName ?? model.EmailUsername, model.Password, model.RememberMe, shouldLockout: false);
             if (result == SignInStatus.Success)
             {
                 return RedirectToLocal(returnUrl);
