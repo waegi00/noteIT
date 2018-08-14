@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using NOTEit.Models;
 using NOTEit.ViewModels.Semester;
 
@@ -49,7 +50,8 @@ namespace NOTEit.Controllers
             var semester = new Semester
             {
                 Name = viewModel.Name,
-                Subjects = _db.Subjects.Where(x => viewModel.Subjects.Contains(x.Id)).ToList()
+                Subjects = _db.Subjects.Where(x => viewModel.Subjects.Contains(x.Id)).ToList(),
+                Owner = _db.Users.Find(User.Identity.GetUserId())
             };
 
             _db.Semesters.Add(semester);

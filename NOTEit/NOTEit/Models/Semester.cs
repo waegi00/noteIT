@@ -12,5 +12,7 @@ namespace NOTEit.Models
 
         [Display(Name = "Fächer")]
         public virtual ICollection<Subject> Subjects { get; set; }
+
+        public virtual ApplicationUser Owner { get; set; }
     }
 }
