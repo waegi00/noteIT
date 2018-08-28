@@ -8,14 +8,16 @@ using NOTEit.ViewModels.Semester;
 
 namespace NOTEit.Controllers
 {
+
     [Authorize]
     public class SemesterController : Controller
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
+        private readonly string _userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
         public ActionResult Index()
         {
-            return View(_db.Semesters.ToList());
+            return View(_db.Semesters.Where(x => x.Owner.Id == _userId).ToList());
         }
 
         public ActionResult Details(int? id)
@@ -25,7 +27,7 @@ namespace NOTEit.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var semester = _db.Semesters.Find(id);
-            if (semester == null)
+            if (semester == null || semester.Owner.Id != _userId)
             {
                 return HttpNotFound();
             }
@@ -68,7 +70,7 @@ namespace NOTEit.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var semester = _db.Semesters.Find(id);
-            if (semester == null)
+            if (semester == null || semester.Owner.Id != _userId)
             {
                 return HttpNotFound();
             }
@@ -90,7 +92,7 @@ namespace NOTEit.Controllers
             if (!ModelState.IsValid) return View(viewModel);
 
             var semester = _db.Semesters.FirstOrDefault(x => x.Id == viewModel.Id);
-            if (semester == null) return View("Error");
+            if (semester == null || semester.Owner.Id != _userId) return View("Error");
             semester.Name = viewModel.Name;
             semester.Subjects.Clear();
             semester.Subjects = _db.Subjects.Where(x => viewModel.Subjects.Contains(x.Id)).ToList();
@@ -107,7 +109,7 @@ namespace NOTEit.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var semester = _db.Semesters.Find(id);
-            if (semester == null)
+            if (semester == null || semester.Owner.Id != _userId)
             {
                 return HttpNotFound();
             }
@@ -119,7 +121,7 @@ namespace NOTEit.Controllers
         public ActionResult Delete(int id)
         {
             var semester = _db.Semesters.Find(id);
-            if (semester == null) return View("Error");
+            if (semester == null || semester.Owner.Id != _userId) return View("Error");
             _db.Semesters.Remove(semester);
             _db.SaveChanges();
             return RedirectToAction("Index");

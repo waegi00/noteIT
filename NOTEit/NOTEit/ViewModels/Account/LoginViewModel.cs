@@ -5,8 +5,9 @@ namespace NOTEit.ViewModels.Account
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "E-Mail / Benutzername")]
-        public string EmailUsername { get; set; }
+        [Display(Name = "E-Mail")]
+        [EmailAddress]
+        public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

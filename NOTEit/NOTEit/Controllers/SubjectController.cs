@@ -2,18 +2,21 @@
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using NOTEit.Models;
 using NOTEit.ViewModels.Subject;
 
 namespace NOTEit.Controllers
 {
+    [Authorize]
     public class SubjectController : Controller
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
-        
+        private readonly string _userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
+
         public ActionResult Index()
         {
-            return View(_db.Subjects.ToList());
+            return View(_db.Subjects.Where(x => x.Owner.Id == _userId).ToList());
         }
         
         public ActionResult Details(int? id)
@@ -23,7 +26,7 @@ namespace NOTEit.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var subject = _db.Subjects.Find(id);
-            if (subject == null)
+            if (subject == null || subject.Owner.Id != _userId)
             {
                 return HttpNotFound();
             }
@@ -32,12 +35,7 @@ namespace NOTEit.Controllers
         
         public ActionResult Create()
         {
-            return View(
-                new SubjectFormViewModel
-                {
-                    AllSemesters = _db.Semesters.ToList()
-                }    
-            );
+            return View();
         }
         
         [HttpPost]
@@ -49,7 +47,7 @@ namespace NOTEit.Controllers
             var subject = new Subject
             {
                 Name = viewModel.Name,
-                Semesters = _db.Semesters.Where(x => viewModel.Semesters.Contains(x.Id)).ToList()
+                Owner = _db.Users.Find(User.Identity.GetUserId())
             };
 
             _db.Subjects.Add(subject);
@@ -65,7 +63,7 @@ namespace NOTEit.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var subject = _db.Subjects.Find(id);
-            if (subject == null)
+            if (subject == null || subject.Owner.Id != _userId)
             {
                 return HttpNotFound();
             }
@@ -73,9 +71,7 @@ namespace NOTEit.Controllers
                 new SubjectFormViewModel
                 {
                     Id = subject.Id,
-                    Name = subject.Name,
-                    Semesters = subject.Semesters.Select(x => x.Id).ToList(),
-                    AllSemesters = _db.Semesters.ToList()
+                    Name = subject.Name
                 }
             );
         }
@@ -87,10 +83,8 @@ namespace NOTEit.Controllers
             if (!ModelState.IsValid) return View(viewModel);
 
             var subject = _db.Subjects.FirstOrDefault(x => x.Id == viewModel.Id);
-            if (subject == null) return View("Error");
+            if (subject == null || subject.Owner.Id != _userId) return View("Error");
             subject.Name = viewModel.Name;
-            subject.Semesters.Clear();
-            subject.Semesters = _db.Semesters.Where(x => viewModel.Semesters.Contains(x.Id)).ToList();
 
             _db.Entry(subject).State = EntityState.Modified;
             _db.SaveChanges();
@@ -104,7 +98,7 @@ namespace NOTEit.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var subject = _db.Subjects.Find(id);
-            if (subject == null)
+            if (subject == null || subject.Owner.Id != _userId)
             {
                 return HttpNotFound();
             }
@@ -116,7 +110,7 @@ namespace NOTEit.Controllers
         public ActionResult Delete(int id)
         {
             var subject = _db.Subjects.Find(id);
-            if (subject == null) return View("Error");
+            if (subject == null || subject.Owner.Id != _userId) return View("Error");
             _db.Subjects.Remove(subject);
             _db.SaveChanges();
             return RedirectToAction("Index");

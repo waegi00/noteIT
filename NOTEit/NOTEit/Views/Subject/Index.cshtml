@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<NOTEit.Models.Subject>
 
 @{
-    ViewBag.Title = "Fachliste";
+    ViewBag.Title = "Fächerliste";
 }
 
 <h2>@ViewBag.Title</h2>
@@ -30,7 +30,7 @@
             <td>
                 @foreach (var semester in item.Semesters)
                 {
-                    @Html.ActionLink(semester.Name, "Edit", "Semester", new { id = semester.Id }, null)
+                    @Html.ActionLink(semester.Name, "Edit", "Subject", new { id = semester.Id }, null)
                     if (semester != item.Semesters.Last())
                     {
                         @Html.DisplayName(", ")
@@ -38,8 +38,8 @@
                 }
             </td>
             <td>
-                @Html.ActionLink("Bearbeiten", "Edit", new { id = item.Id }) |
                 @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Bearbeiten", "Edit", new { id = item.Id }) |
                 @Html.ActionLink("Löschen", "Delete", new { id = item.Id })
             </td>
         </tr>

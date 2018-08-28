@@ -15,5 +15,7 @@ namespace NOTEit.Models
         
         [Display(Name = "Noten")]
         public virtual ICollection<Mark> Marks { get; set; }
+
+        public virtual ApplicationUser Owner { get; set; }
     }
 }
