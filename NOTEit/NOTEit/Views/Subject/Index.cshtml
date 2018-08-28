@@ -30,7 +30,7 @@
             <td>
                 @foreach (var semester in item.Semesters)
                 {
-                    @Html.ActionLink(semester.Name, "Edit", "Subject", new { id = semester.Id }, null)
+                    @Html.ActionLink(semester.Name, "Edit", "Semester", new { id = semester.Id }, null)
                     if (semester != item.Semesters.Last())
                     {
                         @Html.DisplayName(", ")
