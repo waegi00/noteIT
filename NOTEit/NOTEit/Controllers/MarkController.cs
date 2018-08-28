@@ -62,8 +62,8 @@ namespace NOTEit.Controllers
             var mark = new Mark
             {
                 Grade = viewModel.Grade,
-                Semester = viewModel.Semester,
-                Subject = viewModel.Subject
+                Semester = _db.Semesters.Find(viewModel.Semester),
+                Subject = _db.Subjects.Find(viewModel.Subject)
             };
 
             _db.Marks.Add(mark);
@@ -87,8 +87,8 @@ namespace NOTEit.Controllers
                 new MarkFormViewModel
                 {
                     Grade = mark.Grade,
-                    Subject = mark.Subject,
-                    Semester = mark.Semester,
+                    Subject = mark.Subject.Id,
+                    Semester = mark.Semester.Id,
                     AllSemesters = _db.Semesters.Where(x => x.Owner.Id == _userId).ToList(),
                     AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
                 }
@@ -114,8 +114,8 @@ namespace NOTEit.Controllers
             var mark = _db.Marks.FirstOrDefault(x => x.Id == viewModel.Id);
             if (mark == null || mark.Subject.Owner.Id != _userId) return View("Error");
             mark.Grade = viewModel.Grade;
-            mark.Semester = viewModel.Semester;
-            mark.Subject = viewModel.Subject;
+            mark.Semester = _db.Semesters.Find(viewModel.Semester);
+            mark.Subject = _db.Subjects.Find(viewModel.Subject);
 
 
             _db.Entry(mark).State = EntityState.Modified;
