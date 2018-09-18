@@ -34,21 +34,14 @@
     </TypeIdentifier>
   </Class>
   <Class Name="NOTEit.Models.ApplicationUser">
-    <Position X="10" Y="2.75" Width="1.5" />
+    <Position X="10.25" Y="2.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAIAAEAACAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\ApplicationUser.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NOTEit.Models.Mark">
     <Position X="6.75" Y="2.75" Width="1.5" />
-    <AssociationLine Name="Semester" Type="NOTEit.Models.Semester" FixedFromPoint="true" FixedToPoint="true">
-      <Path>
-        <Point X="7.5" Y="4.046" />
-        <Point X="7.5" Y="5" />
-        <Point X="8.5" Y="5" />
-      </Path>
-    </AssociationLine>
     <AssociationLine Name="Subject" Type="NOTEit.Models.Subject" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="7.5" Y="2.75" />
@@ -56,13 +49,20 @@
         <Point X="8.5" Y="1.313" />
       </Path>
     </AssociationLine>
+    <AssociationLine Name="Semester" Type="NOTEit.Models.Semester" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.5" Y="4.046" />
+        <Point X="7.5" Y="5" />
+        <Point X="8.5" Y="5" />
+      </Path>
+    </AssociationLine>
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAIIAAAAAAAAAAAAAAAAAAAAEAAAA=</HashCode>
       <FileName>Models\Mark.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="Semester" />
       <Property Name="Subject" />
+      <Property Name="Semester" />
     </ShowAsAssociation>
   </Class>
   <Class Name="NOTEit.Models.Semester">
@@ -75,9 +75,9 @@
     </AssociationLine>
     <AssociationLine Name="Owner" Type="NOTEit.Models.ApplicationUser" FixedFromPoint="true" FixedToPoint="true">
       <Path>
-        <Point X="10" Y="5.312" />
-        <Point X="10.812" Y="5.312" />
-        <Point X="10.812" Y="3.983" />
+        <Point X="10" Y="5.25" />
+        <Point X="11.468" Y="5.25" />
+        <Point X="11.468" Y="4.569" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>
@@ -102,8 +102,8 @@
     <AssociationLine Name="Owner" Type="NOTEit.Models.ApplicationUser" FixedFromPoint="true" FixedToPoint="true">
       <Path>
         <Point X="10" Y="1.313" />
-        <Point X="10.75" Y="1.313" />
-        <Point X="10.75" Y="2.75" />
+        <Point X="11.375" Y="1.313" />
+        <Point X="11.375" Y="2.5" />
       </Path>
     </AssociationLine>
     <TypeIdentifier>

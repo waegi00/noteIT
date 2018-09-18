@@ -8,17 +8,86 @@ namespace NOTEit.Models
     {
         protected override void Seed(ApplicationDbContext context)
         {
+            #region Roles
+
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+
+            #region Initialize
+
+            var admin = new IdentityRole
+            {
+                Name = "Admin"
+            };
+
+            var supervisor = new IdentityRole
+            {
+                Name = "Supervisor"
+            };
+
+            var apprentice = new IdentityRole
+            {
+                Name = "Apprentice"
+            };
+
+            #endregion
+
+            #region Create
+
+            roleManager.Create(admin);
+            roleManager.Create(apprentice);
+            roleManager.Create(supervisor);
+
+            #endregion
+
+            #endregion
+
             #region Users
 
-            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(context));
+
+            #region Initialize
+
+            var kehrlel = new ApplicationUser
+            {
+                Firstname = "Lars",
+                Lastname = "Kehrle",
+                UserName = "kehrlel",
+                Email = "sral04@bluewin.ch"
+            };
 
             var wegmuellerlu = new ApplicationUser
             {
-                Email = "lukas00@bluewin.ch",
-                UserName = "lukas00@bluewin.ch"
+                Firstname = "Lukas",
+                Lastname = "Wegmüller",
+                UserName = "wegmuellerlu",
+                Email = "lukas00@bluewin.ch"
             };
 
+            var messerlipatr = new ApplicationUser
+            {
+                Firstname = "Patrik",
+                Lastname = "Messerli",
+                UserName = "messerlipatr",
+                Email = "patrik.messerli@gmx.ch"
+            };
+
+            #endregion
+
+            #region Create 
+
+            userManager.Create(kehrlel, "Welcome$18");
             userManager.Create(wegmuellerlu, "Welcome$18");
+            userManager.Create(messerlipatr, "Welcome$18");
+
+            #endregion
+
+            #region Add to roles
+
+            userManager.AddToRole(kehrlel.Id, "Apprentice");
+            userManager.AddToRole(wegmuellerlu.Id, "Supervisor");
+            userManager.AddToRole(messerlipatr.Id, "Admin");
+
+            #endregion
 
             #endregion
 
