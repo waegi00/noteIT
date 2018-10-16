@@ -36,8 +36,15 @@
 
     <script>
         $(document).ready(function () {
-            $("#Subject").chosen();
-            $("#Semester").chosen();
+            $("#Subject").chosen({
+                placeholder_text_single: "Wählen Sie ein Fach aus",
+                no_results_text: "Sie haben noch kein Fach erstellt"
+            });
+
+            $("#Semester").chosen({
+                placeholder_text_single: "Wählen Sie ein Semester aus",
+                no_results_text: "Sie haben noch kein Semester erstellt"
+            });
         });
     </script>
 }

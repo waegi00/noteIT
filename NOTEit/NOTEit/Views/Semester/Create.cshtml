@@ -35,7 +35,10 @@
 
     <script>
         $(document).ready(function () {
-            $("#Subjects").chosen();
+            $("#Subjects").chosen({
+                placeholder_text_multiple: "Wählen Sie die Fächer aus",
+                no_results_text: "Sie haben noch kein Fach erstellt"
+            });
         });
     </script>
 }
