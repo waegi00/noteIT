@@ -75,9 +75,9 @@ namespace NOTEit.Models
 
             #region Create 
 
-            userManager.Create(kehrlel, "Welcome$18");
-            userManager.Create(wegmuellerlu, "Welcome$18");
-            userManager.Create(messerlipatr, "Welcome$18");
+            userManager.Create(kehrlel, "gibbiX12345");
+            userManager.Create(wegmuellerlu, "gibbiX12345");
+            userManager.Create(messerlipatr, "gibbiX12345");
 
             #endregion
 

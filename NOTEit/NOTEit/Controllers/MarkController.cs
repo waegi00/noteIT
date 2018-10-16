@@ -8,6 +8,7 @@ using NOTEit.ViewModels.Mark;
 
 namespace NOTEit.Controllers
 {
+    [Authorize]
     public class MarkController : Controller
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
