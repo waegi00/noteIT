@@ -14,8 +14,5 @@ namespace NOTEit.Models
 
         [Required, Display(Name = "Semester")]
         public virtual Semester Semester { get; set; }
-
-        [Required]
-        public virtual ApplicationUser Apprentice { get; set; }
     }
 }

@@ -195,6 +195,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ApplicationUserController.cs" />
     <Compile Include="Controllers\MarkController.cs" />
     <Compile Include="Controllers\SemesterController.cs" />
     <Compile Include="Controllers\SubjectController.cs" />
@@ -211,6 +212,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Account\LoginViewModel.cs" />
     <Compile Include="ViewModels\Account\RegisterViewModel.cs" />
+    <Compile Include="ViewModels\ApplicationUser\ApplicationUserFormViewModel.cs" />
     <Compile Include="ViewModels\Mark\MarkFormViewModel.cs" />
     <Compile Include="ViewModels\Semester\SemesterFormViewModel.cs" />
     <Compile Include="ViewModels\Subject\SubjectFormViewModel.cs" />
@@ -279,6 +281,12 @@
     <Content Include="Views\Mark\Edit.cshtml" />
     <Content Include="Views\Mark\Index.cshtml" />
     <Content Include="Views\Mark\_Form.cshtml" />
+    <Content Include="Views\ApplicationUser\Create.cshtml" />
+    <Content Include="Views\ApplicationUser\Delete.cshtml" />
+    <Content Include="Views\ApplicationUser\Details.cshtml" />
+    <Content Include="Views\ApplicationUser\Edit.cshtml" />
+    <Content Include="Views\ApplicationUser\Index.cshtml" />
+    <Content Include="Views\ApplicationUser\_Form.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

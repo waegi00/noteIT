@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - NOTEit</title>
@@ -18,13 +18,31 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("NOTEit", "Index", "Semester", new { area = "" }, new { @class = "navbar-brand" })
+                @if (User.IsInRole("Apprentice"))
+                {
+                    @Html.ActionLink("NOTEit", "Index", "Semester", new { area = "" }, new { @class = "navbar-brand" })
+                }
+                else if (User.IsInRole("Admin"))
+                {
+                    @Html.ActionLink("NOTEit", "Index", "ApplicationUser", new { area = "" }, new { @class = "navbar-brand" })
+                }
+                else
+                {
+                    <a class="navbar-brand" href="#">NOTEit</a>
+                }
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Semester", "Index", "Semester")</li>
-                    <li>@Html.ActionLink("Fächer", "Index", "Subject")</li>
-                    <li>@Html.ActionLink("Noten", "Index", "Mark")</li>
+                    @if (User.IsInRole("Apprentice"))
+                    {
+                        <li>@Html.ActionLink("Semester", "Index", "Semester")</li>
+                        <li>@Html.ActionLink("Fächer", "Index", "Subject")</li>
+                        <li>@Html.ActionLink("Noten", "Index", "Mark")</li>
+                    }
+                    else if(User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Lernende", "Index", "ApplicationUser")</li>
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

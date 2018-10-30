@@ -56,7 +56,7 @@ namespace NOTEit.Controllers
             var result = await SignInManager.PasswordSignInAsync(_db.Users.FirstOrDefault(x => x.Email == model.EmailUsername)?.UserName ?? model.EmailUsername, model.Password, model.RememberMe, shouldLockout: false);
             if (result == SignInStatus.Success)
             {
-                return RedirectToLocal(returnUrl);
+                RedirectToLocal(returnUrl);
             }
             ModelState.AddModelError("", "Ungültiger Anmeldeversuch.");
             return View(model);

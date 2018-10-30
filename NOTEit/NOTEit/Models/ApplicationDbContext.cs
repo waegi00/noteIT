@@ -20,14 +20,5 @@ namespace NOTEit.Models
         {
             return new ApplicationDbContext();
         }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Subject>()
-                .HasRequired(s => s.Owner)
-                .WithMany(o => o.Subjects)
-                .WillCascadeOnDelete(true);
-        }
     }
 }

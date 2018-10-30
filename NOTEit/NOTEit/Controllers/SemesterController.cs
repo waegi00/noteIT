@@ -8,8 +8,7 @@ using NOTEit.ViewModels.Semester;
 
 namespace NOTEit.Controllers
 {
-
-    [Authorize]
+    [Authorize(Roles = "Apprentice")]
     public class SemesterController : Controller
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();

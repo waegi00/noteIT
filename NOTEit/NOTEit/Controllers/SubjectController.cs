@@ -8,7 +8,7 @@ using NOTEit.ViewModels.Subject;
 
 namespace NOTEit.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Apprentice")]
     public class SubjectController : Controller
     {
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
