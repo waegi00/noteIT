@@ -38,7 +38,7 @@ namespace NOTEit.Controllers
             return View(
                 new MarkFormViewModel
                 {
-                    AllSemesters = _db.Semesters.Where(x => x.Owner.Id == _userId).ToList(),
+                    AllSemesters = _db.Semesters.Where(x => x.Subjects.Any(y => y.Owner.Id == _userId)).ToList(),
                     AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
                 }
             );
@@ -55,7 +55,7 @@ namespace NOTEit.Controllers
                         Grade = viewModel.Grade,
                         Subject = viewModel.Subject,
                         Semester = viewModel.Semester,
-                        AllSemesters = _db.Semesters.Where(x => x.Owner.Id == _userId).ToList(),
+                        AllSemesters = _db.Semesters.Where(x => x.Subjects.Any(y => y.Owner.Id == _userId)).ToList(),
                         AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
                     }
                 );
@@ -90,7 +90,7 @@ namespace NOTEit.Controllers
                     Grade = mark.Grade,
                     Subject = mark.Subject.Id,
                     Semester = mark.Semester.Id,
-                    AllSemesters = _db.Semesters.Where(x => x.Owner.Id == _userId).ToList(),
+                    AllSemesters = _db.Semesters.Where(x => x.Subjects.Any(y => y.Owner.Id == _userId)).ToList(),
                     AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
                 }
             );
@@ -107,7 +107,7 @@ namespace NOTEit.Controllers
                         Grade = viewModel.Grade,
                         Subject = viewModel.Subject,
                         Semester = viewModel.Semester,
-                        AllSemesters = _db.Semesters.Where(x => x.Owner.Id == _userId).ToList(),
+                        AllSemesters = _db.Semesters.Where(x => x.Subjects.Any(y => y.Owner.Id == _userId)).ToList(),
                         AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
                     }
                 );

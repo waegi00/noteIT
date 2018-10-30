@@ -19,11 +19,6 @@ namespace NOTEit.Models
                 Name = "Admin"
             };
 
-            var supervisor = new IdentityRole
-            {
-                Name = "Supervisor"
-            };
-
             var apprentice = new IdentityRole
             {
                 Name = "Apprentice"
@@ -35,7 +30,6 @@ namespace NOTEit.Models
 
             roleManager.Create(admin);
             roleManager.Create(apprentice);
-            roleManager.Create(supervisor);
 
             #endregion
 
@@ -75,16 +69,16 @@ namespace NOTEit.Models
 
             #region Create 
 
-            userManager.Create(kehrlel, "gibbiX12345");
-            userManager.Create(wegmuellerlu, "gibbiX12345");
-            userManager.Create(messerlipatr, "gibbiX12345");
+            userManager.Create(kehrlel, "Welcome$18");
+            userManager.Create(wegmuellerlu, "Welcome$18");
+            userManager.Create(messerlipatr, "Welcome$18");
 
             #endregion
 
             #region Add to roles
 
             userManager.AddToRole(kehrlel.Id, "Apprentice");
-            userManager.AddToRole(wegmuellerlu.Id, "Supervisor");
+            userManager.AddToRole(wegmuellerlu.Id, "Apprentice");
             userManager.AddToRole(messerlipatr.Id, "Admin");
 
             #endregion

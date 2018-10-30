@@ -17,7 +17,7 @@ namespace NOTEit.Controllers
 
         public ActionResult Index()
         {
-            return View(_db.Semesters.Where(x => x.Owner.Id == _userId).ToList());
+            return View(_db.Semesters.Where(x => x.Subjects.Any(y => y.Owner.Id == _userId)).ToList());
         }
 
         public ActionResult Details(int? id)
@@ -27,7 +27,7 @@ namespace NOTEit.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var semester = _db.Semesters.Find(id);
-            if (semester == null || semester.Owner.Id != _userId)
+            if (semester == null || semester.Subjects.All(x => x.Owner.Id != _userId))
             {
                 return HttpNotFound();
             }
@@ -39,7 +39,7 @@ namespace NOTEit.Controllers
             return View(
                 new SemesterFormViewModel
                 {
-                    AllSubjects = _db.Subjects.ToList()
+                    AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
                 }
             );
         }
@@ -53,8 +53,7 @@ namespace NOTEit.Controllers
             var semester = new Semester
             {
                 Name = viewModel.Name,
-                Subjects = _db.Subjects.Where(x => viewModel.Subjects.Contains(x.Id)).ToList(),
-                Owner = _db.Users.Find(User.Identity.GetUserId())
+                Subjects = _db.Subjects.Where(x => viewModel.Subjects.Contains(x.Id)).ToList()
             };
 
             _db.Semesters.Add(semester);
@@ -70,7 +69,7 @@ namespace NOTEit.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var semester = _db.Semesters.Find(id);
-            if (semester == null || semester.Owner.Id != _userId)
+            if (semester == null || semester.Subjects.All(x => x.Owner.Id != _userId))
             {
                 return HttpNotFound();
             }
@@ -80,7 +79,7 @@ namespace NOTEit.Controllers
                     Id = semester.Id,
                     Name = semester.Name,
                     Subjects = semester.Subjects.Select(x => x.Id).ToList(),
-                    AllSubjects = _db.Subjects.ToList()
+                    AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
                 }
             );
         }
@@ -92,7 +91,7 @@ namespace NOTEit.Controllers
             if (!ModelState.IsValid) return View(viewModel);
 
             var semester = _db.Semesters.FirstOrDefault(x => x.Id == viewModel.Id);
-            if (semester == null || semester.Owner.Id != _userId) return View("Error");
+            if (semester == null || semester.Subjects.All(x => x.Owner.Id != _userId)) return View("Error");
             semester.Name = viewModel.Name;
             semester.Subjects.Clear();
             semester.Subjects = _db.Subjects.Where(x => viewModel.Subjects.Contains(x.Id)).ToList();
@@ -109,7 +108,7 @@ namespace NOTEit.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             var semester = _db.Semesters.Find(id);
-            if (semester == null || semester.Owner.Id != _userId)
+            if (semester == null || semester.Subjects.All(x => x.Owner.Id != _userId))
             {
                 return HttpNotFound();
             }
@@ -121,7 +120,7 @@ namespace NOTEit.Controllers
         public ActionResult Delete(int id)
         {
             var semester = _db.Semesters.Find(id);
-            if (semester == null || semester.Owner.Id != _userId) return View("Error");
+            if (semester == null || semester.Subjects.All(x => x.Owner.Id != _userId)) return View("Error");
             _db.Semesters.Remove(semester);
             _db.SaveChanges();
             return RedirectToAction("Index");
