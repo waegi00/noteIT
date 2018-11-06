@@ -10,7 +10,7 @@ namespace NOTEit.ViewModels.Semester
         [Required, Display(Name = "Name")]
         public string Name { get; set; }
         
-        [Display(Name = "Fächer")]
+        [Required, Display(Name = "Fächer")]
         public virtual ICollection<int> Subjects { get; set; } = new List<int>();
         
         public virtual ICollection<Models.Subject> AllSubjects { get; set; }

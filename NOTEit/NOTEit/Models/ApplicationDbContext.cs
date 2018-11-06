@@ -11,6 +11,8 @@ namespace NOTEit.Models
 
         public DbSet<Subject> Subjects { get; set; }
 
+        public DbSet<WishMark> WishMarks { get; set; }
+
         public ApplicationDbContext() : base("DefaultConnection", throwIfV1Schema: false)
         {
             Database.SetInitializer(new ApplicationDbInitializer());
@@ -19,6 +21,26 @@ namespace NOTEit.Models
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<WishMark>()
+                .HasMany(w => w.Marks)
+                .WithOptional(m => m.WishMark)
+                .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<WishMark>()
+                .HasRequired(w => w.Subject)
+                .WithMany(s => s.WishMarks)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<WishMark>()
+                .HasRequired(w => w.Semester)
+                .WithMany(s => s.WishMarks)
+                .WillCascadeOnDelete(false);
         }
     }
 }

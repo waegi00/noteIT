@@ -10,7 +10,9 @@ namespace NOTEit.Models
         [Required, Display(Name = "Name")]
         public string Name { get; set; }
 
-        [Display(Name = "Fächer")]
+        [Required, Display(Name = "Fächer")]
         public virtual ICollection<Subject> Subjects { get; set; }
+
+        public virtual ICollection<WishMark> WishMarks { get; set; }
     }
 }

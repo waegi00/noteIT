@@ -4,39 +4,26 @@ using System.Net;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using NOTEit.Models;
-using NOTEit.ViewModels.Mark;
+using NOTEit.ViewModels.WishMark;
 
 namespace NOTEit.Controllers
 {
     [Authorize(Roles = "Apprentice")]
-    public class MarkController : Controller
+    public class WishMarkController : Controller
     {
+
         private readonly ApplicationDbContext _db = new ApplicationDbContext();
         private readonly string _userId = System.Web.HttpContext.Current.User.Identity.GetUserId();
 
         public ActionResult Index()
         {
-            return View(_db.Marks.Where(x => x.Subject.Owner.Id == _userId).ToList());
-        }
-
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var mark = _db.Marks.Find(id);
-            if (mark == null || mark.Subject.Owner.Id != _userId)
-            {
-                return HttpNotFound();
-            }
-            return View(mark);
+            return View(_db.WishMarks.ToList());
         }
 
         public ActionResult Create()
         {
             return View(
-                new MarkFormViewModel
+                new WishMarkFormViewModel
                 {
                     AllSemesters = _db.Semesters.Where(x => x.Subjects.Any(y => y.Owner.Id == _userId)).ToList(),
                     AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
@@ -46,13 +33,14 @@ namespace NOTEit.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(MarkFormViewModel viewModel)
+        public ActionResult Create(WishMarkFormViewModel viewModel)
         {
             if (!ModelState.IsValid)
                 return View(
-                    new MarkFormViewModel
+                    new WishMarkFormViewModel
                     {
-                        Grade = viewModel.Grade,
+                        WishGrade = viewModel.WishGrade,
+                        Amount = viewModel.Amount,
                         Subject = viewModel.Subject,
                         Semester = viewModel.Semester,
                         AllSemesters = _db.Semesters.Where(x => x.Subjects.Any(y => y.Owner.Id == _userId)).ToList(),
@@ -60,15 +48,16 @@ namespace NOTEit.Controllers
                     }
                 );
 
-            var mark = new Mark
+            var wishMark = new WishMark
             {
-                Grade = viewModel.Grade,
+                WishGrade = viewModel.WishGrade,
+                Amount = viewModel.Amount,
                 Semester = _db.Semesters.Find(viewModel.Semester),
                 Subject = _db.Subjects.Find(viewModel.Subject),
-                WishMark = _db.WishMarks.FirstOrDefault(x => x.Semester.Id == viewModel.Semester && x.Subject.Id == viewModel.Subject)
+                Marks = _db.Marks.Where(x => x.Semester.Id == viewModel.Semester && x.Subject.Id == viewModel.Subject).ToList()
             };
 
-            _db.Marks.Add(mark);
+            _db.WishMarks.Add(wishMark);
             _db.SaveChanges();
             return RedirectToAction("Index");
 
@@ -80,18 +69,19 @@ namespace NOTEit.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var mark = _db.Marks.Find(id);
-            if (mark == null || mark.Subject.Owner.Id != _userId)
+            var wishMark = _db.WishMarks.Find(id);
+            if (wishMark == null || wishMark.Subject.Owner.Id != _userId)
             {
                 return HttpNotFound();
             }
             return View(
-                new MarkFormViewModel
+                new WishMarkFormViewModel
                 {
-                    Id = mark.Id,
-                    Grade = mark.Grade,
-                    Subject = mark.Subject.Id,
-                    Semester = mark.Semester.Id,
+                    Id = wishMark.Id,
+                    WishGrade = wishMark.WishGrade,
+                    Amount = wishMark.Amount,
+                    Subject = wishMark.Subject.Id,
+                    Semester = wishMark.Semester.Id,
                     AllSemesters = _db.Semesters.Where(x => x.Subjects.Any(y => y.Owner.Id == _userId)).ToList(),
                     AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
                 }
@@ -100,14 +90,15 @@ namespace NOTEit.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(MarkFormViewModel viewModel)
+        public ActionResult Edit(WishMarkFormViewModel viewModel)
         {
             if (!ModelState.IsValid)
                 return View(
-                    new MarkFormViewModel
+                    new WishMarkFormViewModel
                     {
                         Id = viewModel.Id,
-                        Grade = viewModel.Grade,
+                        WishGrade = viewModel.WishGrade,
+                        Amount = viewModel.Amount,
                         Subject = viewModel.Subject,
                         Semester = viewModel.Semester,
                         AllSemesters = _db.Semesters.Where(x => x.Subjects.Any(y => y.Owner.Id == _userId)).ToList(),
@@ -115,14 +106,16 @@ namespace NOTEit.Controllers
                     }
                 );
 
-            var mark = _db.Marks.FirstOrDefault(x => x.Id == viewModel.Id);
-            if (mark == null || mark.Subject.Owner.Id != _userId) return View("Error");
-            mark.Grade = viewModel.Grade;
-            mark.Semester = _db.Semesters.Find(viewModel.Semester);
-            mark.Subject = _db.Subjects.Find(viewModel.Subject);
-            mark.WishMark = _db.WishMarks.FirstOrDefault(x => x.Semester.Id == viewModel.Semester && x.Subject.Id == viewModel.Subject);
+            var wishMark = _db.WishMarks.FirstOrDefault(x => x.Id == viewModel.Id);
+            if (wishMark == null || wishMark.Subject.Owner.Id != _userId) return View("Error");
+            wishMark. WishGrade = viewModel.WishGrade;
+            wishMark.Amount = viewModel.Amount;
+            wishMark.Semester = _db.Semesters.Find(viewModel.Semester);
+            wishMark.Subject = _db.Subjects.Find(viewModel.Subject);
+            wishMark.Marks.Clear();
+            wishMark.Marks = _db.Marks.Where(x => x.Semester.Id == viewModel.Semester && x.Subject.Id == viewModel.Subject).ToList();
 
-            _db.Entry(mark).State = EntityState.Modified;
+            _db.Entry(wishMark).State = EntityState.Modified;
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -133,21 +126,21 @@ namespace NOTEit.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var mark = _db.Marks.Find(id);
-            if (mark == null || mark.Subject.Owner.Id != _userId)
+            var wishMark = _db.WishMarks.Find(id);
+            if (wishMark == null || wishMark.Subject.Owner.Id != _userId)
             {
                 return HttpNotFound();
             }
-            return View(mark);
+            return View(wishMark);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            var mark = _db.Marks.Find(id);
-            if (mark == null || mark.Subject.Owner.Id != _userId) return View("Error");
-            _db.Marks.Remove(mark);
+            var wishMark = _db.WishMarks.Find(id);
+            if (wishMark == null || wishMark.Subject.Owner.Id != _userId) return View("Error");
+            _db.WishMarks.Remove(wishMark);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }

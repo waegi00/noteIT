@@ -38,8 +38,9 @@
                         <li>@Html.ActionLink("Semester", "Index", "Semester")</li>
                         <li>@Html.ActionLink("Fächer", "Index", "Subject")</li>
                         <li>@Html.ActionLink("Noten", "Index", "Mark")</li>
+                        <li>@Html.ActionLink("Wunschnoten", "Index", "WishMark")</li>
                     }
-                    else if(User.IsInRole("Admin"))
+                    else if (User.IsInRole("Admin"))
                     {
                         <li>@Html.ActionLink("Lernende", "Index", "ApplicationUser")</li>
                     }

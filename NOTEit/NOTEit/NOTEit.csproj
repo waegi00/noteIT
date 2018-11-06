@@ -199,6 +199,7 @@
     <Compile Include="Controllers\MarkController.cs" />
     <Compile Include="Controllers\SemesterController.cs" />
     <Compile Include="Controllers\SubjectController.cs" />
+    <Compile Include="Controllers\WishMarkController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -208,6 +209,7 @@
     <Compile Include="Models\Mark.cs" />
     <Compile Include="Models\Semester.cs" />
     <Compile Include="Models\Subject.cs" />
+    <Compile Include="Models\WishMark.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Account\LoginViewModel.cs" />
@@ -216,6 +218,7 @@
     <Compile Include="ViewModels\Mark\MarkFormViewModel.cs" />
     <Compile Include="ViewModels\Semester\SemesterFormViewModel.cs" />
     <Compile Include="ViewModels\Subject\SubjectFormViewModel.cs" />
+    <Compile Include="ViewModels\WishMark\WishMarkFormViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-chosen.css" />
@@ -287,6 +290,11 @@
     <Content Include="Views\ApplicationUser\Edit.cshtml" />
     <Content Include="Views\ApplicationUser\Index.cshtml" />
     <Content Include="Views\ApplicationUser\_Form.cshtml" />
+    <Content Include="Views\WishMark\Create.cshtml" />
+    <Content Include="Views\WishMark\Delete.cshtml" />
+    <Content Include="Views\WishMark\Edit.cshtml" />
+    <Content Include="Views\WishMark\Index.cshtml" />
+    <Content Include="Views\WishMark\_Form.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

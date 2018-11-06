@@ -14,5 +14,7 @@ namespace NOTEit.Models
 
         [Required, Display(Name = "Semester")]
         public virtual Semester Semester { get; set; }
+
+        public virtual WishMark WishMark { get; set; }
     }
 }

@@ -18,5 +18,7 @@ namespace NOTEit.Models
 
         [Required]
         public virtual ApplicationUser Owner { get; set; }
+
+        public virtual ICollection<WishMark> WishMarks { get; set; }
     }
 }

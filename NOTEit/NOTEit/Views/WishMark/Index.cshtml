@@ -1,0 +1,104 @@
+﻿@using System.Globalization
+@model IEnumerable<NOTEit.Models.WishMark>
+
+@{
+    ViewBag.Title = "Wunschnotenliste";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>
+    @Html.ActionLink("Neue Wunschnote erstellen", "Create")
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.WishGrade)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Subject)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Semester)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Marks)
+        </th>
+        <th>
+            @Html.Raw("Anzahl noch folgende Tests")
+        </th>
+        <th>
+            @Html.Raw("Benötigte Durchschnittsnote")
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.WishGrade)
+            </td>
+            <td>
+                @Html.ActionLink(item.Subject.Name, "Edit", "Subject", new { id = item.Subject.Id }, null)
+            </td>
+            <td>
+                @Html.ActionLink(item.Semester.Name, "Edit", "Semester", new { id = item.Semester.Id }, null)
+            </td>
+            @if (item.Marks.Count >= item.Amount)
+            {
+                <td>
+                    @{
+                        var value = item.Marks.Select(x => x.Grade).Average().ToString(CultureInfo.InvariantCulture);
+                        @Html.DisplayFor(modelItem => value)
+                    }
+                </td>
+                <td>
+                    0
+                </td>
+                <td>
+                    -
+                </td>
+            }
+            else
+            {
+                <td>
+                    @{
+                        var value = "Keine Note vorhanden";
+                        if (item.Marks.Any())
+                        {
+                            value = item.Marks.Select(x => x.Grade).Average().ToString(CultureInfo.InvariantCulture);
+                        }
+                    }
+                    @Html.DisplayFor(modelItem => value)
+                </td>
+                <td>
+                    @{
+                        var value2 = item.Amount;
+                        if (item.Marks.Any())
+                        {
+                            value2 -= item.Marks.Count;
+                        }
+                    }
+                    @Html.DisplayFor(modelItem => value2)
+                </td>
+                <td>
+                    @{
+                        var value3 = item.WishGrade;
+                        if (item.Marks.Any())
+                        {
+                            value3 = (item.WishGrade * item.Amount - item.Marks.Sum(x => x.Grade)) / (item.Amount - item.Marks.Count);
+                        }
+                    }
+                    @Html.DisplayFor(modelItem => value3)
+                </td>
+            }
+            <td>
+                @Html.ActionLink("Bearbeiten", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Löschen", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>
