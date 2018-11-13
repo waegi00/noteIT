@@ -1,0 +1,96 @@
+﻿@model ICollection<NOTEit.Models.Subject>
+
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@foreach (var subject in Model.Where(x => x.Marks.Count() > 0))
+{
+    <h2>@subject.Name</h2>
+    <canvas id="canvas{@subject.Id}" width="300" height="200"></canvas>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        $(document).ready(function () {
+            @foreach (var subject in Model.Where(x => x.Marks.Count() > 0))
+            {
+                var marks = subject.Marks.Select(x => x.Grade).ToList();
+                double avarage = marks.Count > 0 ? marks.Average() : 0.0;
+
+                <text>makeChart(@Html.Raw(Json.Encode(subject.Id)), @Html.Raw(Json.Encode(marks.ToArray())), @Html.Raw(Json.Encode(subject.WishMarks.Select(x => x.WishGrade).FirstOrDefault())), @avarage);</text>
+            }
+        });
+
+        function makeChart(id, marks, wishMark, avg) {
+            var Id = "canvas{" + id + "}";
+            console.log(Id);
+            var labels = new Array(marks.length);
+            var wishMarks = new Array(marks.length);
+            var avgs = new Array(marks.length);
+            for (i = 1; i <= marks.length; i++) {
+                labels[i - 1] = i + ". Note";
+                wishMarks[i - 1] = wishMark;
+                avgs[i - 1] = avg;
+            }
+            var ctx = document.getElementById(Id).getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: ["Noten"],
+                            data: marks,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255,99,132,1)'
+                            ],
+                            borderWidth: 2
+                        },
+                        {
+                            label: ["Wunschnote"],
+                            data: wishMarks,
+                            backgroundColor: [
+                                'rgba(0, 0, 0, 0)'
+                            ],
+                            borderColor: [
+                                'rgba(54, 162, 235, 1)'
+                            ],
+                            borderWidth: 1
+                        },
+                        {
+                            label: ["Durchschnitt"],
+                            data: avgs,
+                            backgroundColor: [
+                                'rgba(0, 0, 0, 0)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 206, 86, 1)'
+                            ],
+                            borderWidth: 1
+                        },
+
+                    ]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+
+                                min: 1,
+                                max: 6
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+
+    </script>
+}

@@ -20,7 +20,7 @@
                 </button>
                 @if (User.IsInRole("Apprentice"))
                 {
-                    @Html.ActionLink("NOTEit", "Index", "Semester", new { area = "" }, new { @class = "navbar-brand" })
+                    @Html.ActionLink("NOTEit", "Index", "Dashboard", new { area = "" }, new { @class = "navbar-brand" })
                 }
                 else if (User.IsInRole("Admin"))
                 {
