@@ -67,7 +67,7 @@ namespace NOTEit.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Semester");
+            return RedirectToAction("Index", "Dashboard");
         }
 
         protected override void Dispose(bool disposing)
@@ -110,7 +110,7 @@ namespace NOTEit.Controllers
             {
                 return Redirect(returnUrl);
             }
-            return RedirectToAction("Index", "Semester");
+            return RedirectToAction("Index", "Dashboard");
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

@@ -1,33 +1,53 @@
-﻿@model ICollection<NOTEit.Models.Subject>
+﻿@model ICollection<NOTEit.Models.Semester>
 
 @{
+    /**/
+
     ViewBag.Title = "Dashboard";
 }
 
 <h2>@ViewBag.Title</h2>
 
-@foreach (var subject in Model.Where(x => x.Marks.Count() > 0))
-{
-    <h2>@subject.Name</h2>
-    <canvas id="canvas{@subject.Id}" width="300" height="200"></canvas>
-}
+<div class="charts">
+    @foreach (var semester in Model.Where(x => x.Subjects.Any(y => y.Marks.Where(z => z.Semester.Id == x.Id).Any())).ToList())
+    {
+        <div class="card">
+            <div class="card-header">
+                <h1 style="margin-top: 2rem;">@semester.Name</h1>
+            </div>
+            <div class="card-body d-flex flex-wrap">
+                @foreach (var subject in semester.Subjects.Where(x => x.Marks.Where(y => y.Semester.Id == semester.Id).Any()).ToList())
+                {
+                    <div class="chart" style="float: left;">
+                        <h2>@subject.Name</h2>
+                        <canvas id="canvas-@semester.Id-@subject.Id"></canvas>
+                    </div>
+
+                }
+            </div>
+            <div style="float: none;"></div>
+        </div>
+    }
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript">
-        $(document).ready(function () {
-            @foreach (var subject in Model.Where(x => x.Marks.Count() > 0))
-            {
-                var marks = subject.Marks.Select(x => x.Grade).ToList();
-                double avarage = marks.Count > 0 ? marks.Average() : 0.0;
+            $(document).ready(function () {
+               @foreach (var semester in Model.Where(x => x.Subjects.Any(y => y.Marks.Any())).ToList())
+                {
+                    foreach (var subject in semester.Subjects.Where(x => x.Marks.Where(y => y.Semester.Id == semester.Id).Any()).ToList())
+                    {
+                        var marks = subject.Marks.Where(x => x.Semester.Id == semester.Id).Select(x => x.Grade).ToList();
+                        double avarage = marks.Count > 0 ? marks.Average() : 0.0;
 
-                <text>makeChart(@Html.Raw(Json.Encode(subject.Id)), @Html.Raw(Json.Encode(marks.ToArray())), @Html.Raw(Json.Encode(subject.WishMarks.Select(x => x.WishGrade).FirstOrDefault())), @avarage);</text>
-            }
-        });
+                        <text>makeChart(@Html.Raw(Json.Encode(semester.Id + "-" + subject.Id)), @Html.Raw(Json.Encode(marks.ToArray())), @Html.Raw(Json.Encode(subject.WishMarks.Where(x => x.Semester.Id == semester.Id).Select(x => x.WishGrade).FirstOrDefault())), @avarage);</text>
+                    }
+                }
+            });
 
         function makeChart(id, marks, wishMark, avg) {
-            var Id = "canvas{" + id + "}";
-            console.log(Id);
+            var Id = "canvas-" + id;
             var labels = new Array(marks.length);
             var wishMarks = new Array(marks.length);
             var avgs = new Array(marks.length);

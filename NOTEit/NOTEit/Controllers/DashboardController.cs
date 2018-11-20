@@ -13,7 +13,7 @@ namespace NOTEit.Controllers
 
         public ActionResult Index()
         {
-            return View(_db.Subjects.Where(x => x.Owner.Id == _userId).ToList());
+            return View(_db.Semesters.Where(x => x.Subjects.Any(y => y.Owner.Id == _userId)).ToList());
         }
     }
 }
