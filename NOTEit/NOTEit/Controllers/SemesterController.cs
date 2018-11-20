@@ -47,7 +47,28 @@ namespace NOTEit.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(SemesterFormViewModel viewModel)
         {
-            if (!ModelState.IsValid) return View(viewModel);
+            if (!ModelState.IsValid)
+                return View(
+                    new SemesterFormViewModel
+                    {
+                        Name = viewModel.Name,
+                        Subjects = viewModel.Subjects,
+                        AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
+                    }
+                );
+
+            if (!viewModel.Subjects.Any())
+            {
+                ModelState.AddModelError("Subjects", "Wählen Sie mindestens ein Fach aus");
+                return View(
+                    new SemesterFormViewModel
+                    {
+                        Name = viewModel.Name,
+                        Subjects = viewModel.Subjects,
+                        AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
+                    }
+                );
+            }
 
             var semester = new Semester
             {
@@ -87,7 +108,28 @@ namespace NOTEit.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(SemesterFormViewModel viewModel)
         {
-            if (!ModelState.IsValid) return View(viewModel);
+            if (!ModelState.IsValid)
+                return View(
+                    new SemesterFormViewModel
+                    {
+                        Name = viewModel.Name,
+                        Subjects = viewModel.Subjects,
+                        AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
+                    }
+                );
+
+            if (!viewModel.Subjects.Any())
+            {
+                ModelState.AddModelError("Subjects", "Wählen Sie mindestens ein Fach aus");
+                return View(
+                    new SemesterFormViewModel
+                    {
+                        Name = viewModel.Name,
+                        Subjects = viewModel.Subjects,
+                        AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
+                    }
+                );
+            }
 
             var semester = _db.Semesters.FirstOrDefault(x => x.Id == viewModel.Id);
             if (semester == null || semester.Subjects.All(x => x.Owner.Id != _userId)) return View("Error");

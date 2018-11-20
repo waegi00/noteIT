@@ -17,7 +17,7 @@ namespace NOTEit.Controllers
 
         public ActionResult Index()
         {
-            return View(_db.WishMarks.ToList());
+            return View(_db.WishMarks.Where(x => x.Subject.Owner.Id == _userId).ToList());
         }
 
         public ActionResult Create()
@@ -47,6 +47,22 @@ namespace NOTEit.Controllers
                         AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
                     }
                 );
+
+            if ((bool)!_db.Semesters.FirstOrDefault(x => x.Id == viewModel.Semester)?.Subjects.Contains(_db.Subjects.FirstOrDefault(y => y.Id == viewModel.Subject)))
+            {
+                ModelState.AddModelError("Subject", "Dieses Fach ist nicht im ausgewählten Semester.");
+                return View(
+                    new WishMarkFormViewModel
+                    {
+                        WishGrade = viewModel.WishGrade,
+                        Amount = viewModel.Amount,
+                        Subject = viewModel.Subject,
+                        Semester = viewModel.Semester,
+                        AllSemesters = _db.Semesters.Where(x => x.Subjects.Any(y => y.Owner.Id == _userId)).ToList(),
+                        AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
+                    }
+                );
+            }
 
             var wishMark = new WishMark
             {
@@ -105,6 +121,22 @@ namespace NOTEit.Controllers
                         AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
                     }
                 );
+
+            if ((bool)!_db.Semesters.FirstOrDefault(x => x.Id == viewModel.Semester)?.Subjects.Contains(_db.Subjects.FirstOrDefault(y => y.Id == viewModel.Subject)))
+            {
+                ModelState.AddModelError("Subject", "Dieses Fach ist nicht im ausgewählten Semester.");
+                return View(
+                    new WishMarkFormViewModel
+                    {
+                        WishGrade = viewModel.WishGrade,
+                        Amount = viewModel.Amount,
+                        Subject = viewModel.Subject,
+                        Semester = viewModel.Semester,
+                        AllSemesters = _db.Semesters.Where(x => x.Subjects.Any(y => y.Owner.Id == _userId)).ToList(),
+                        AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
+                    }
+                );
+            }
 
             var wishMark = _db.WishMarks.FirstOrDefault(x => x.Id == viewModel.Id);
             if (wishMark == null || wishMark.Subject.Owner.Id != _userId) return View("Error");

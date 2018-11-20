@@ -60,6 +60,21 @@ namespace NOTEit.Controllers
                     }
                 );
 
+            if ((bool)!_db.Semesters.FirstOrDefault(x => x.Id == viewModel.Semester)?.Subjects.Contains(_db.Subjects.FirstOrDefault(y => y.Id == viewModel.Subject)))
+            {
+                ModelState.AddModelError("Subject", "Dieses Fach ist nicht im ausgewählten Semester.");
+                return View(
+                    new MarkFormViewModel
+                    {
+                        Grade = viewModel.Grade,
+                        Subject = viewModel.Subject,
+                        Semester = viewModel.Semester,
+                        AllSemesters = _db.Semesters.Where(x => x.Subjects.Any(y => y.Owner.Id == _userId)).ToList(),
+                        AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
+                    }
+                );
+            }
+
             var mark = new Mark
             {
                 Grade = viewModel.Grade,
@@ -114,6 +129,22 @@ namespace NOTEit.Controllers
                         AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
                     }
                 );
+
+            if ((bool)!_db.Semesters.FirstOrDefault(x => x.Id == viewModel.Semester)?.Subjects.Contains(_db.Subjects.FirstOrDefault(y => y.Id == viewModel.Subject)))
+            {
+                ModelState.AddModelError("Subject", "Dieses Fach ist nicht im ausgewählten Semester.");
+                return View(
+                    new MarkFormViewModel
+                    {
+                        Id = viewModel.Id,
+                        Grade = viewModel.Grade,
+                        Subject = viewModel.Subject,
+                        Semester = viewModel.Semester,
+                        AllSemesters = _db.Semesters.Where(x => x.Subjects.Any(y => y.Owner.Id == _userId)).ToList(),
+                        AllSubjects = _db.Subjects.Where(x => x.Owner.Id == _userId).ToList()
+                    }
+                );
+            }
 
             var mark = _db.Marks.FirstOrDefault(x => x.Id == viewModel.Id);
             if (mark == null || mark.Subject.Owner.Id != _userId) return View("Error");

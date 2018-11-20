@@ -47,7 +47,7 @@ namespace NOTEit.Controllers
             var subject = new Subject
             {
                 Name = viewModel.Name,
-                Owner = _db.Users.Find(User.Identity.GetUserId())
+                Owner = _db.Users.Find(_userId)
             };
 
             _db.Subjects.Add(subject);
