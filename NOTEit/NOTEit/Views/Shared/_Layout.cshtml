@@ -35,8 +35,8 @@
                 <ul class="nav navbar-nav">
                     @if (User.IsInRole("Apprentice"))
                     {
-                        <li>@Html.ActionLink("Semester", "Index", "Semester")</li>
                         <li>@Html.ActionLink("Fächer", "Index", "Subject")</li>
+                        <li>@Html.ActionLink("Semester", "Index", "Semester")</li>
                         <li>@Html.ActionLink("Noten", "Index", "Mark")</li>
                         <li>@Html.ActionLink("Wunschnoten", "Index", "WishMark")</li>
                     }
